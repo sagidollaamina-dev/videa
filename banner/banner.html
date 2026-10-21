@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Баннер 4 мазхаба</title>
+<link rel="stylesheet" href="../node_modules/@fontsource/playfair-display/900.css">
+<link rel="stylesheet" href="../node_modules/@fontsource/playfair-display/500-italic.css">
+<link rel="stylesheet" href="../node_modules/@fontsource/montserrat/600.css">
+<link rel="stylesheet" href="../node_modules/@fontsource/montserrat/700.css">
+<style>
+  * { margin: 0; padding: 0; }
+  html, body { width: 1080px; height: 1920px; overflow: hidden; background: #030814; }
+  svg { display: block; }
+  .t1 { font: 900 132px 'Playfair Display', serif; letter-spacing: .02em; }
+  .t2 { font: italic 500 50px 'Playfair Display', serif; }
+  .t3 { font: 700 22px 'Montserrat', sans-serif; letter-spacing: .26em; }
+</style>
+</head>
+<body>
+<svg id="b" width="1080" height="1920" viewBox="0 0 1080 1920"></svg>
+<script>
+// Banner: four figures seen from behind before the Kaaba, framed by a carved doorway. ?text=0 hides the titles.
+const showText = new URLSearchParams(location.search).get('text') !== '0';
+let seed = 5;
+const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+
+const defs = `
+<defs>
+  <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#0a1836"/><stop offset=".32" stop-color="#28466f"/>
+    <stop offset=".55" stop-color="#8d9bab"/><stop offset=".68" stop-color="#d9c9a8"/><stop offset="1" stop-color="#e9dcc0"/>
+  </linearGradient>
+  <radialGradient id="halo" cx=".5" cy=".5" r=".5">
+    <stop offset="0" stop-color="#fff6e2" stop-opacity=".95"/><stop offset=".35" stop-color="#f1dcb2" stop-opacity=".55"/>
+    <stop offset="1" stop-color="#e8d5b0" stop-opacity="0"/>
+  </radialGradient>
+  <filter id="clouds" x="0" y="0" width="100%" height="100%">
+    <feTurbulence type="fractalNoise" baseFrequency=".0028 .0065" numOctaves="6" seed="9"/>
+    <feColorMatrix values="0 0 0 0 .93  0 0 0 0 .91  0 0 0 0 .88  0 0 0 1.9 -.88"/>
+  </filter>
+  <filter id="clouds2" x="0" y="0" width="100%" height="100%">
+    <feTurbulence type="fractalNoise" baseFrequency=".006 .012" numOctaves="5" seed="3"/>
+    <feColorMatrix values="0 0 0 0 .55  0 0 0 0 .66  0 0 0 0 .82  0 0 0 2.2 -1.15"/>
+  </filter>
+  <filter id="b4"><feGaussianBlur stdDeviation="4"/></filter>
+  <filter id="b10" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="10"/></filter>
+  <filter id="b30" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="30"/></filter>
+  <filter id="b1"><feGaussianBlur stdDeviation="1.1"/></filter>
+  <filter id="grain"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="4"/><feColorMatrix values="0 0 0 0 .5  0 0 0 0 .5  0 0 0 0 .5  0 0 0 .09 0"/></filter>
+  <linearGradient id="kaaba" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0" stop-color="#0c1220"/><stop offset=".5" stop-color="#151d30"/><stop offset="1" stop-color="#0a0f1b"/>
+  </linearGradient>
+  <linearGradient id="gold" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#f3e0b4"/><stop offset=".5" stop-color="#c9a46c"/><stop offset="1" stop-color="#8f6d3c"/>
+  </linearGradient>
+  <linearGradient id="frame" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0" stop-color="#2a2318"/><stop offset=".35" stop-color="#8a7350"/><stop offset=".6" stop-color="#d8c39a"/><stop offset="1" stop-color="#5a4a32"/>
+  </linearGradient>
+  <linearGradient id="frameR" x1="1" y1="0" x2="0" y2="0">
+    <stop offset="0" stop-color="#2a2318"/><stop offset=".35" stop-color="#8a7350"/><stop offset=".6" stop-color="#d8c39a"/><stop offset="1" stop-color="#5a4a32"/>
+  </linearGradient>
+  <pattern id="carve" width="90" height="90" patternUnits="userSpaceOnUse">
+    <g fill="none" stroke="#1d1810" stroke-opacity=".75" stroke-width="2.2">
+      <rect x="22" y="22" width="46" height="46"/><rect x="22" y="22" width="46" height="46" transform="rotate(45 45 45)"/>
+      <circle cx="45" cy="45" r="11"/><path d="M0 0L22 22M90 0L68 22M0 90L22 68M90 90L68 68"/>
+    </g>
+    <g fill="none" stroke="#fff3d6" stroke-opacity=".35" stroke-width="1" transform="translate(1 1)">
+      <rect x="22" y="22" width="46" height="46" transform="rotate(45 45 45)"/><circle cx="45" cy="45" r="11"/>
+    </g>
+  </pattern>
+  <pattern id="check" width="14" height="14" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+    <rect width="14" height="14" fill="none"/><rect x="0" y="0" width="7" height="7" fill="#fff"/><rect x="7" y="7" width="7" height="7" fill="#000" opacity=".6"/>
+  </pattern>
+  <linearGradient id="ledge" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#3a4256"/><stop offset=".08" stop-color="#1a2133"/><stop offset="1" stop-color="#05080f"/>
+  </linearGradient>
+  <linearGradient id="titleG" x1="0" y1="0" x2="0" y2="1">
+    <stop offset=".1" stop-color="#fffaf0"/><stop offset=".55" stop-color="#ead7b2"/><stop offset="1" stop-color="#b48d55"/>
+  </linearGradient>
+  <linearGradient id="fade" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#030814" stop-opacity="0"/><stop offset="1" stop-color="#030814" stop-opacity=".95"/>
+  </linearGradient>
+  <linearGradient id="topFade" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#030814" stop-opacity=".85"/><stop offset="1" stop-color="#030814" stop-opacity="0"/>
+  </linearGradient>
+</defs>`;
+
+// ---------- background ----------
+function minaret(x, base, h, s) {
+  const w = 26 * s;
+  return `<g opacity=".9">
+    <rect x="${x - w / 2}" y="${base - h}" width="${w}" height="${h}" fill="#e9e1d0"/>
+    <rect x="${x - w / 2}" y="${base - h}" width="${w * 0.35}" height="${h}" fill="#c9c3b6" opacity=".6"/>
+    ${[0.25, 0.5, 0.72].map((k) => `<rect x="${x - w * 0.8}" y="${base - h * k - 10 * s}" width="${w * 1.6}" height="${10 * s}" fill="#f4eee2"/><rect x="${x - w * 0.8}" y="${base - h * k}" width="${w * 1.6}" height="${4 * s}" fill="#9aa2ae" opacity=".7"/>`).join('')}
+    <path d="M${x - w * 0.55} ${base - h} L${x} ${base - h - 70 * s} L${x + w * 0.55} ${base - h} Z" fill="#e2d8c4"/>
+    <circle cx="${x}" cy="${base - h - 76 * s}" r="${4 * s}" fill="#c9a46c"/></g>`;
+}
+function arcade(x0, x1, y, h, n, op) {
+  let s = `<rect x="${x0}" y="${y}" width="${x1 - x0}" height="${h}" fill="#ece3d1" opacity="${op}"/>`;
+  const w = (x1 - x0) / n;
+  for (let i = 0; i < n; i++) {
+    const cx = x0 + w * i + w / 2, aw = w * 0.62, top = y + h * 0.25;
+    s += `<path d="M${cx - aw / 2} ${y + h} V${top + aw * 0.4} Q${cx - aw / 2} ${top} ${cx} ${top - aw * 0.15} Q${cx + aw / 2} ${top} ${cx + aw / 2} ${top + aw * 0.4} V${y + h} Z" fill="#7d7f86" opacity="${op * 0.75}"/>`;
+  }
+  return s;
+}
+function crowd() {
+  let s = '';
+  const cols = ['#f4efe6', '#e8e0d0', '#d8d2c6', '#c9c4ba', '#f9f6f0', '#b9b5ad', '#8f9096', '#e6d6b8'];
+  for (let i = 0; i < 2600; i++) {
+    const t = Math.pow(rnd(), 0.8);
+    const y = 1275 + t * 260, sc = 0.35 + t * 1.5, x = rnd() * 1080;
+    const c = cols[Math.floor(rnd() * cols.length)];
+    s += `<ellipse cx="${x.toFixed(1)}" cy="${(y + 7 * sc).toFixed(1)}" rx="${(5.2 * sc).toFixed(1)}" ry="${(9 * sc).toFixed(1)}" fill="${c}"/>` +
+         `<circle cx="${x.toFixed(1)}" cy="${(y - 4 * sc).toFixed(1)}" r="${(3 * sc).toFixed(1)}" fill="${rnd() < 0.7 ? c : '#3a3a3e'}"/>`;
+  }
+  return `<g filter="url(#b1)">${s}</g>`;
+}
+function kaaba() {
+  const x0 = 300, x1 = 780, top = 760, bot = 1300, side = 70;
+  const band = 860;
+  let cal = '';
+  for (let i = 0; i < 16; i++) {
+    const x = x0 + 18 + i * 28;
+    cal += `<path d="M${x} ${band + 30} q6 -16 12 0 t12 0" fill="none" stroke="#5c4422" stroke-width="2.4"/>`;
+  }
+  return `
+  <ellipse cx="540" cy="1000" rx="520" ry="420" fill="url(#halo)" opacity=".55" filter="url(#b30)"/>
+  <path d="M${x1} ${top} L${x1 + side} ${top + 18} L${x1 + side} ${bot - 6} L${x1} ${bot} Z" fill="#070b14"/>
+  <rect x="${x0}" y="${top}" width="${x1 - x0}" height="${bot - top}" fill="url(#kaaba)"/>
+  <g opacity=".22">${Array.from({ length: 12 }, (_, i) => `<path d="M${x0 + 20 + i * 40} ${top} V${bot}" stroke="#2a3550" stroke-width="1"/>`).join('')}</g>
+  <path d="M${x1} ${band + 2} L${x1 + side} ${band + 16} L${x1 + side} ${band + 58} L${x1} ${band + 50} Z" fill="#8f6d3c"/>
+  <rect x="${x0}" y="${band}" width="${x1 - x0}" height="50" fill="url(#gold)"/>
+  <rect x="${x0}" y="${band + 4}" width="${x1 - x0}" height="2" fill="#fff3d6" opacity=".7"/>
+  ${cal}
+  ${[0.12, 0.3, 0.5, 0.7, 0.88].map((k) => `<rect x="${x0 + (x1 - x0) * k - 16}" y="${band + 74}" width="32" height="46" rx="4" fill="none" stroke="url(#gold)" stroke-width="2.4" opacity=".85"/><path d="M${x0 + (x1 - x0) * k - 9} ${band + 98} q4.5 -9 9 0 t9 0" fill="none" stroke="#c9a46c" stroke-width="2"/>`).join('')}
+  <rect x="${x0 + (x1 - x0) * 0.62}" y="${band + 150}" width="96" height="190" fill="url(#gold)" opacity=".95"/>
+  <rect x="${x0 + (x1 - x0) * 0.62 + 10}" y="${band + 160}" width="76" height="170" fill="none" stroke="#5c4422" stroke-width="2"/>
+  <rect x="${x0}" y="${top}" width="${x1 - x0}" height="3" fill="#3b4a6a"/>`;
+}
+function rays() {
+  let s = '';
+  for (let i = 0; i < 9; i++) {
+    const a = -70 + i * 17.5, w = 30 + rnd() * 60;
+    s += `<polygon points="540,980 ${540 + Math.tan((a * Math.PI) / 180) * 1000 - w},0 ${540 + Math.tan((a * Math.PI) / 180) * 1000 + w},0" fill="#fff2d6" opacity="${0.05 + rnd() * 0.06}"/>`;
+  }
+  return `<g filter="url(#b10)">${s}</g>`;
+}
+
+// ---------- figures ----------
+// Local units: head top at (0,0), robe hem at y=1000. Scarf/robe colours carry the madhab accent.
+function figure(cx, top, sc, o) {
+  const { scarf, scarfDark, robe, robeDark, trim, bisht } = o;
+  const id = 'f' + Math.round(cx);
+  const body = `M-46 112 C-90 118 -150 140 -184 196 C-200 226 -206 300 -210 420 C-214 560 -222 760 -232 1000 L232 1000 C222 760 214 560 210 420 C206 300 200 226 184 196 C150 140 90 118 46 112 Z`;
+  const drape = `M-38 106 C-68 128 -90 168 -94 228 C-98 320 -86 400 -66 484 L66 484 C86 400 98 320 94 228 C90 168 68 128 38 106 Z`;
+  const folds = Array.from({ length: 8 }, (_, i) => {
+    const x = -165 + i * 47 + (rnd() - 0.5) * 16;
+    return `<path d="M${x * 0.75} 330 C${x * 0.9} 540 ${x * 1.02} 760 ${x * 1.08} 1000" fill="none" stroke="${robeDark}" stroke-width="${8 + rnd() * 12}" stroke-opacity=".32" filter="url(#b4)"/>`;
+  }).join('');
+  const sf = Array.from({ length: 7 }, (_, i) => {
+    const x = -60 + i * 20;
+    return `<path d="M${x * 0.55} 140 C${x * 0.85} 260 ${x * 0.95} 380 ${x * 0.9} 480" fill="none" stroke="${scarfDark}" stroke-width="${4 + rnd() * 4}" stroke-opacity=".5" filter="url(#b1)"/>`;
+  }).join('');
+  const fringe = Array.from({ length: 22 }, (_, i) => { const x = -64 + i * 6.1; return `<path d="M${x} 482 l${((rnd() - 0.5) * 5).toFixed(1)} ${(12 + rnd() * 12).toFixed(1)}" stroke="${scarf}" stroke-width="2.2"/>`; }).join('');
+  const wraps = Array.from({ length: 4 }, (_, i) => `<path d="M-46 ${34 + i * 18} Q0 ${20 + i * 20} 46 ${38 + i * 16}" fill="none" stroke="${scarfDark}" stroke-width="4.5" stroke-opacity=".55"/>`).join('');
+  return `<g transform="translate(${cx} ${top}) scale(${sc})">
+    <defs>
+      <linearGradient id="${id}r" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${robe}"/><stop offset="1" stop-color="${robeDark}"/></linearGradient>
+      <linearGradient id="${id}s" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="${scarfDark}"/><stop offset=".42" stop-color="${scarf}"/><stop offset=".6" stop-color="${scarf}"/><stop offset="1" stop-color="${scarfDark}"/></linearGradient>
+      <linearGradient id="${id}sv" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".18"/><stop offset=".5" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".3"/></linearGradient>
+      <linearGradient id="${id}rim" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff1d6" stop-opacity=".85"/><stop offset=".1" stop-color="#fff1d6" stop-opacity="0"/><stop offset=".9" stop-color="#fff1d6" stop-opacity="0"/><stop offset="1" stop-color="#fff1d6" stop-opacity=".85"/></linearGradient>
+      <clipPath id="${id}c"><ellipse cx="0" cy="58" rx="48" ry="58"/></clipPath><clipPath id="${id}d"><path d="${drape}"/></clipPath>
+      <radialGradient id="${id}h" cx=".42" cy=".35" r=".7"><stop offset="0" stop-color="${scarf}"/><stop offset="1" stop-color="${scarfDark}"/></radialGradient>
+    </defs>
+    <path d="${body}" fill="url(#${id}r)" stroke="#05080f" stroke-opacity=".35" stroke-width="3"/>
+    ${bisht ? `<path d="M-184 196 C-200 226 -206 300 -210 420 C-214 560 -222 760 -232 1000 L-198 1000 C-190 760 -184 520 -170 214 Z" fill="${trim}" opacity=".85"/>
+               <path d="M184 196 C200 226 206 300 210 420 C214 560 222 760 232 1000 L198 1000 C190 760 184 520 170 214 Z" fill="${trim}" opacity=".85"/>` : ''}
+    <path d="M-150 250 C-156 420 -160 560 -158 690" fill="none" stroke="${robeDark}" stroke-width="10" stroke-opacity=".55" filter="url(#b4)"/>
+    <path d="M150 250 C156 420 160 560 158 690" fill="none" stroke="${robeDark}" stroke-width="10" stroke-opacity=".55" filter="url(#b4)"/>
+    ${folds}
+    <path d="${body}" fill="url(#${id}rim)" opacity=".5"/>
+    <path d="${drape}" fill="url(#${id}s)"/>
+    <rect x="-120" y="100" width="240" height="400" fill="url(#${id}sv)" clip-path="url(#${id}d)"/>
+    ${sf}${fringe}
+    <path d="M-36 84 C-40 104 -44 120 -46 136 L46 136 C44 120 40 104 36 84 Z" fill="url(#${id}s)"/>
+    <ellipse cx="0" cy="114" rx="40" ry="12" fill="#000" opacity=".3" filter="url(#b4)"/>
+    <ellipse cx="0" cy="58" rx="48" ry="58" fill="url(#${id}h)"/>
+    <g clip-path="url(#${id}c)"><ellipse cx="0" cy="58" rx="48" ry="58" fill="url(#check)" opacity=".12"/></g>
+    ${wraps}
+    <path d="M-46 50 C-48 16 -28 0 4 0" fill="none" stroke="#fff1d6" stroke-width="2.5" stroke-opacity=".3" filter="url(#b4)"/>
+  </g>`;
+}
+
+const FIG = [
+  { cx: 175, top: 1160, sc: 0.86, scarf: '#d9b984', scarfDark: '#7a5c32', robe: '#22324f', robeDark: '#060a14', trim: '#c9a46c', bisht: true },   // Малик — бежевый
+  { cx: 418, top: 1080, sc: 0.8, scarf: '#3b7fe8', scarfDark: '#14306a', robe: '#efe9dc', robeDark: '#8a867d' },                                  // Абу Ханифа — синий
+  { cx: 662, top: 1080, sc: 0.8, scarf: '#8fd0ff', scarfDark: '#2a5a88', robe: '#efe9dc', robeDark: '#8a867d' },                                  // аш-Шафии — голубой
+  { cx: 905, top: 1160, sc: 0.86, scarf: '#f3e3c3', scarfDark: '#9a7c4e', robe: '#22324f', robeDark: '#060a14', trim: '#e8d5b0', bisht: true },   // Ахмад — кремовый
+];
+
+// ---------- frame ----------
+function frame() {
+  const arch = `M0 0 H1080 V1920 H990 V560 C990 330 800 190 540 120 C280 190 90 330 90 560 V1920 H0 Z`;
+  return `
+  <path d="${arch}" fill="url(#frame)"/>
+  <rect x="0" y="0" width="90" height="1920" fill="url(#frame)"/><rect x="990" y="0" width="90" height="1920" fill="url(#frameR)"/>
+  <path d="${arch}" fill="url(#carve)" opacity=".9"/>
+  <path d="M90 1920 V560 C90 330 280 190 540 120 C800 190 990 330 990 560 V1920" fill="none" stroke="#f6e8c8" stroke-width="5" stroke-opacity=".8"/>
+  <path d="M74 1920 V556 C74 318 270 172 540 100 C810 172 1006 318 1006 556 V1920" fill="none" stroke="#1d1810" stroke-width="6" stroke-opacity=".8"/>
+  <path d="M106 1920 V566 C106 345 292 206 540 140 C788 206 974 345 974 566 V1920" fill="none" stroke="#c9a46c" stroke-width="2" stroke-opacity=".7"/>
+  <path d="${arch}" fill="#0a1328" opacity=".28"/>`;
+}
+
+const svg = `${defs}
+  <rect width="1080" height="1920" fill="url(#sky)"/>
+  <rect width="1080" height="1300" filter="url(#clouds2)" opacity=".7"/>
+  <rect width="1080" height="1250" filter="url(#clouds)" opacity=".85"/>
+  ${rays()}
+  ${minaret(170, 1230, 430, 1.1)}${minaret(910, 1230, 430, 1.1)}${minaret(60, 1240, 330, 0.9)}${minaret(1020, 1240, 330, 0.9)}
+  <rect x="0" y="1080" width="1080" height="240" fill="#b9b3a6" opacity=".25" filter="url(#b10)"/>
+  ${arcade(0, 330, 1150, 130, 5, 0.95)}${arcade(750, 1080, 1150, 130, 5, 0.95)}
+  ${kaaba()}
+  <rect x="0" y="1130" width="1080" height="200" fill="#e3d9c6" opacity=".35" filter="url(#b30)"/>
+  ${crowd()}
+  <rect x="0" y="1460" width="1080" height="460" fill="url(#fade)"/>
+  <rect x="0" y="1520" width="1080" height="400" fill="url(#ledge)" opacity=".35"/>
+  ${[FIG[1], FIG[2], FIG[0], FIG[3]].map((f) => figure(f.cx, f.top, f.sc, f)).join('')}
+  <rect x="0" y="1700" width="1080" height="220" fill="url(#fade)"/>
+  ${frame()}
+  <rect width="1080" height="560" fill="url(#topFade)" opacity=".55"/>
+  ${showText ? `
+  <text x="540" y="400" text-anchor="middle" class="t1" fill="url(#titleG)" style="filter:drop-shadow(0 6px 18px rgba(0,0,0,.6)) drop-shadow(0 0 30px rgba(232,200,140,.35))">
+    <tspan fill="#6fb2ff" style="filter:drop-shadow(0 0 24px rgba(59,140,255,.9))">4</tspan> МАЗХАБА</text>
+  <text x="540" y="480" text-anchor="middle" class="t2" fill="#cfe3ff" style="filter:drop-shadow(0 0 18px rgba(59,140,255,.8)) drop-shadow(0 2px 8px rgba(0,0,0,.8))">четыре пути — один источник</text>
+  <text x="540" y="1840" text-anchor="middle" class="t3" fill="#e8d5b0" opacity=".92">МАЛИК · АБУ ХАНИФА · АШ-ШАФИИ · АХМАД</text>` : ''}
+  <rect width="1080" height="1920" filter="url(#grain)"/>
+  <rect width="1080" height="1920" fill="none" stroke="#000" stroke-opacity=".0"/>`;
+document.getElementById('b').innerHTML = svg;
+window.ready = document.fonts.ready.then(() => document.fonts.load('900 40px "Playfair Display"', 'МАЗХАБА')).then(() => true);
+</script>
+</body>
+</html>
