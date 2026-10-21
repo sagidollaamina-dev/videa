@@ -32,7 +32,12 @@ const proj = (lon, lat) => [R * ((lon * Math.PI) / 180 - L0), -R * (Math.log(Mat
 // ---------- timeline ----------
 const SCENES = [];
 let T = 0;
-const scene = (d, opts, f) => { SCENES.push({ a: T, b: T + d, ...opts, f }); T += d; };
+const VOICE_LEAD = 0.15;
+const scene = (d, opts, f) => {
+  const v = (window.VOICE || [])[SCENES.length] || 0;
+  d = Math.max(d, v + VOICE_LEAD + (opts.final ? 1.4 : 0.45));
+  SCENES.push({ a: T, b: T + d, d, voice: v, ...opts, f }); T += d;
+};
 
 // ---------- UI pieces (return HTML strings) ----------
 const row = (y, inner, style = '') => `<div class="row" style="top:${y}px;${style}">${inner}</div>`;
@@ -320,13 +325,14 @@ scene(4.0, { cam: [37.5, 26.5, 1.5, -2], cam2: [37.5, 26.7, 1.62, 0] }, (lt, o) 
   const sides = [-1, 1, 1, 1, -1];
   dot(o.svg, pts[0][0], pts[0][1], pr(lt, 0.05, 0.4), lt);
   small(o, pts[0], 'Газа', pr(lt, 0.1, 0.4), { size: 44, anchor: 'right' });
+  const step = (o.d - 0.9) / 4;
   for (let i = 0; i < 4; i++) {
-    const s = 0.3 + i * 0.9, p = E.inOut3(pr(lt, s, s + 0.5));
+    const s = 0.3 + i * step, p = E.inOut3(pr(lt, s, s + 0.5));
     arc(o.svg, pts[i], pts[i + 1], p, { bend: i % 2 ? -0.3 : 0.3, w: 3.5, col: '#8fd0ff' });
     const q = pr(lt, s + 0.45, s + 0.75);
     dot(o.svg, pts[i + 1][0], pts[i + 1][1], q, lt);
     small(o, pts[i + 1], ROUTE[i + 1][1], q, sides[i + 1] > 0 ? { size: 44 } : { size: 44, anchor: 'right' });
-    o.html.push(caption(ROUTE_CAP[i], lt, s + 0.25, i < 3 ? s + 1.15 : 99));
+    o.html.push(caption(ROUTE_CAP[i], lt, s + 0.25, i < 3 ? s + step + 0.25 : 99));
   }
 });
 
@@ -375,6 +381,7 @@ scene(4.4, { dim: true }, (lt, o) => {
   const edge = (a, b, ra, rb) => { const d = Math.hypot(b[0] - a[0], b[1] - a[1]); const ux = (b[0] - a[0]) / d, uy = (b[1] - a[1]) / d; return [[a[0] + ux * ra, a[1] + uy * ra], [b[0] - ux * rb, b[1] - uy * rb]]; };
   const links = [['maliki', 'shafii', 1.4, 'учитель', false, -0.18], ['hanafi', 'shafii', 1.9, 'через аш-Шайбани', true, 0.18], ['shafii', 'hanbali', 2.4, 'учитель', false, 0]];
   links.forEach(([f, to, s, lab, dash, bend]) => {
+    s *= o.d / 4.4;
     const [a, b] = edge(NET[f], NET[to], 150, 135);
     const p = E.inOut3(pr(lt, s, s + 0.5));
     arc(o.svg, a, b, p, { bend, col: dash ? '#e8d5b0' : '#8fd0ff', w: 3.5, dash });
@@ -536,7 +543,7 @@ window.renderFrame = (frame) => {
   for (const s of SCENES) {
     if (t < s.a || t >= s.b) continue;
     const lt = t - s.a;
-    const o = { svg: [], html: [], S: (pt) => toScreen(pt, cam) };
+    const o = { svg: [], html: [], d: s.d, S: (pt) => toScreen(pt, cam) };
     s.f(lt, o);
     const ein = E.out3(pr(t, s.a, s.a + 0.28)), eout = pr(t, s.b - 0.2, s.b);
     const op = ein * (1 - eout), sc = lerp(1.07, 1, ein) * lerp(1, 1.05, eout), bl = (1 - ein) * 10 + eout * 8;
@@ -552,6 +559,7 @@ window.renderFrame = (frame) => {
 };
 
 window.DURATION = DUR;
+window.TIMELINE = SCENES.map((s) => ({ a: s.a, voice: s.voice, lead: VOICE_LEAD }));
 window.FPS = FPS;
 window.ready = (async () => {
   const fams = ['900 40px "Playfair Display"', '800 40px "Playfair Display"', '700 40px "Playfair Display"', '600 40px "Playfair Display"', 'italic 500 40px "Playfair Display"',

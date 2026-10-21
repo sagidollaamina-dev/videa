@@ -35,7 +35,7 @@ if (stillsArg) {
 }
 
 const probe = await openPage();
-const { dur, fps } = await probe.evaluate(() => ({ dur: window.DURATION, fps: window.FPS }));
+const { dur, fps, timeline } = await probe.evaluate(() => ({ dur: window.DURATION, fps: window.FPS, timeline: window.TIMELINE }));
 await probe.close();
 const total = Math.round(dur * fps);
 console.log(`duration ${dur.toFixed(2)}s, ${total} frames, ${WORKERS} workers`);
@@ -61,7 +61,33 @@ await Promise.all(Array.from({ length: WORKERS }, async (_, w) => {
 await browser.close();
 
 fs.writeFileSync('out/list.txt', Array.from({ length: WORKERS }, (_, w) => `file 'part${w}.mp4'`).join('\n'));
-await new Promise((r, j) => spawn('ffmpeg', ['-y', '-v', 'error', '-f', 'concat', '-safe', '0', '-i', 'out/list.txt', '-c', 'copy', '-movflags', '+faststart', 'out/madhab.mp4'], { stdio: 'inherit' })
-  .on('close', (c) => (c ? j(new Error('concat failed')) : r())));
+const run = (a) => new Promise((r, j) => spawn('ffmpeg', ['-y', '-v', 'error', ...a], { stdio: 'inherit' }).on('close', (c) => (c ? j(new Error('ffmpeg failed')) : r())));
+await run(['-f', 'concat', '-safe', '0', '-i', 'out/list.txt', '-c', 'copy', 'out/video.mp4']);
+
+// Audio: narration lines voice/lNN.wav placed at their scene start + soft whooshes on cuts
+const lines = timeline.map((_, i) => `voice/l${String(i + 1).padStart(2, '0')}.wav`).filter((f) => fs.existsSync(f));
+if (lines.length) {
+  await run(['-f', 'lavfi', '-i', 'anoisesrc=color=pink:amplitude=0.6:duration=0.6', '-af',
+    'highpass=f=400,lowpass=f=5000,afade=t=in:d=0.25:curve=exp,afade=t=out:st=0.25:d=0.35,volume=0.22', '-ar', '22050', '-ac', '1', 'out/whoosh.wav']);
+  const inputs = [], filters = [], tags = [];
+  lines.forEach((f, i) => {
+    inputs.push('-i', f);
+    const ms = Math.round((timeline[i].a + timeline[i].lead) * 1000);
+    filters.push(`[${i}]aresample=44100,adelay=${ms}|${ms}[v${i}]`); tags.push(`[v${i}]`);
+  });
+  timeline.slice(1).forEach((s, k) => {
+    const n = lines.length + k;
+    inputs.push('-i', 'out/whoosh.wav');
+    const ms = Math.max(0, Math.round((s.a - 0.3) * 1000));
+    filters.push(`[${n}]aresample=44100,adelay=${ms}|${ms}[w${k}]`); tags.push(`[w${k}]`);
+  });
+  filters.push(`${tags.join('')}amix=inputs=${tags.length}:normalize=0,loudnorm=I=-15:TP=-1.5,apad[a]`);
+  await run([...inputs, '-i', 'out/video.mp4', '-filter_complex', filters.join(';'), '-map', `${inputs.length / 2}:v`, '-map', '[a]',
+    '-c:v', 'copy', '-c:a', 'aac', '-b:a', '160k', '-shortest', '-movflags', '+faststart', 'out/madhab.mp4']);
+  fs.rmSync('out/video.mp4'); fs.rmSync('out/whoosh.wav');
+} else {
+  fs.renameSync('out/video.mp4', 'out/madhab.mp4');
+}
+fs.rmSync('out/list.txt');
 for (let w = 0; w < WORKERS; w++) fs.rmSync(`out/part${w}.mp4`);
 console.log('done: out/madhab.mp4', ((Date.now() - started) / 1000).toFixed(0) + 's');
