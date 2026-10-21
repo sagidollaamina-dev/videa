@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Сторис прогрев</title>
+<link rel="stylesheet" href="../node_modules/@fontsource/playfair-display/900.css">
+<link rel="stylesheet" href="../node_modules/@fontsource/playfair-display/800.css">
+<link rel="stylesheet" href="../node_modules/@fontsource/playfair-display/500-italic.css">
+<link rel="stylesheet" href="../node_modules/@fontsource/montserrat/500.css">
+<link rel="stylesheet" href="../node_modules/@fontsource/montserrat/600.css">
+<link rel="stylesheet" href="../node_modules/@fontsource/montserrat/700.css">
+<link rel="stylesheet" href="../node_modules/@fontsource/amiri/700.css">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1080px; height: 1920px; overflow: hidden; background: #030814; }
+  .story { position: relative; width: 1080px; height: 1920px; overflow: hidden; display: none;
+    background: radial-gradient(120% 80% at 50% 40%, #0d1e42 0%, #050c1c 55%, #02050d 100%); color: #f6eedf; }
+  .story.on { display: block; }
+  .bg { position: absolute; inset: -40px; background-size: cover; background-position: center; }
+  .pat { position: absolute; inset: 0; opacity: .5; }
+  .vig { position: absolute; inset: 0; background: radial-gradient(120% 70% at 50% 45%, transparent 40%, rgba(0,0,0,.75) 100%); }
+  .c { position: absolute; left: 0; right: 0; text-align: center; padding: 0 80px; }
+  .tag { display: inline-block; font: 700 24px 'Montserrat'; letter-spacing: .24em; color: #d6e8ff;
+    border: 1.5px solid rgba(111,178,255,.75); background: rgba(16,44,100,.5); padding: 13px 28px; border-radius: 999px;
+    box-shadow: 0 0 34px rgba(59,140,255,.45); }
+  .h { font: 900 92px/1.05 'Playfair Display', serif; color: #f6eedf; text-shadow: 0 6px 30px rgba(0,0,0,.8); }
+  .grad { background: linear-gradient(180deg, #fffaf0 10%, #ead7b2 55%, #b99258 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .acc { color: #6fb2ff; text-shadow: 0 0 28px rgba(59,140,255,.9), 0 0 60px rgba(59,140,255,.5); }
+  .sub { font: 500 40px/1.4 'Montserrat', sans-serif; color: #e8d5b0; text-shadow: 0 2px 16px rgba(0,0,0,.9); }
+  .it { font: italic 500 46px/1.3 'Playfair Display', serif; color: #e8d5b0; }
+  .card { display: inline-block; text-align: center; padding: 30px 44px; border-radius: 32px;
+    background: linear-gradient(180deg, rgba(255,255,255,.13), rgba(255,255,255,.04)); border: 1.5px solid rgba(232,213,176,.55);
+    backdrop-filter: blur(16px); box-shadow: 0 24px 70px rgba(0,0,0,.55), 0 0 46px rgba(59,140,255,.2); }
+  .slot { display: inline-flex; align-items: center; justify-content: center; width: 760px; height: 230px; border-radius: 30px;
+    border: 3px dashed rgba(232,213,176,.45); font: 600 30px 'Montserrat'; color: rgba(232,213,176,.6); letter-spacing: .06em; }
+  .cap { display: inline-block; background: linear-gradient(90deg, #f6ecd8, #e6cfa3); color: #0a1630; font: 700 36px/1.3 'Montserrat';
+    padding: 18px 34px; border-radius: 10px; box-shadow: 0 0 40px rgba(232,213,176,.35); }
+  .dots { position: absolute; top: 120px; left: 0; right: 0; text-align: center; font: 700 22px 'Montserrat'; letter-spacing: .3em; color: rgba(232,213,176,.7); }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <pattern id="stars" width="160" height="160" patternUnits="userSpaceOnUse">
+      <g fill="none" stroke="rgba(143,208,255,.10)" stroke-width="1.2">
+        <rect x="40" y="40" width="80" height="80"/><rect x="40" y="40" width="80" height="80" transform="rotate(45 80 80)"/>
+        <circle cx="80" cy="80" r="22"/><path d="M0 0L40 40M160 0L120 40M0 160L40 120M160 160L120 120"/>
+      </g>
+    </pattern>
+    <radialGradient id="medFill" r="0.7"><stop offset="0" stop-color="#16346e"/><stop offset="1" stop-color="#071230"/></radialGradient>
+    <radialGradient id="medInner" r="0.8"><stop offset="0" stop-color="#11285a"/><stop offset="1" stop-color="#050c1f"/></radialGradient>
+  </defs>
+</svg>
+
+<!-- 1. Хук -->
+<div class="story" id="s1">
+  <div class="bg" style="background-image:url(../banner/banner-clean.png);filter:blur(14px) brightness(.38) saturate(1.1)"></div>
+  <div class="vig"></div>
+  <div class="dots">● ○ ○</div>
+  <div class="c" style="top:300px"><span class="tag">ВОПРОС ДНЯ</span></div>
+  <div class="c" style="top:420px"><div class="h" style="font-size:80px">Почему один брат<br>держит руки <span class="acc" style="white-space:nowrap">на груди,</span><br>а другой — <span class="acc">ниже?</span></div></div>
+  <div class="c" style="top:920px"><div class="it">И оба молятся правильно.</div></div>
+  <div class="c" style="top:1080px"><div class="slot">сюда стикер «Опрос»</div></div>
+  <div class="c" style="top:1360px"><div class="sub">Ответ — в истории,<br>которой больше 1200 лет 👇</div></div>
+</div>
+
+<!-- 2. Сторителл -->
+<div class="story" id="s2">
+  <svg class="pat" width="1080" height="1920"><rect width="1080" height="1920" fill="url(#stars)"/></svg>
+  <div class="vig"></div>
+  <div class="dots">● ● ○</div>
+  <div class="c" style="top:280px"><div class="it">767 год.</div></div>
+  <div class="c" style="top:360px"><div class="h" style="font-size:84px">В Багдаде умирает <span class="acc">Абу Ханифа</span></div></div>
+  <div class="c" style="top:610px"><div class="h grad" style="font-size:84px">в тот же год в Газе рождается <span class="acc" style="-webkit-text-fill-color:#6fb2ff;white-space:nowrap">аш&#8209;Шафии</span></div></div>
+  <div class="c" style="top:880px" id="meds"></div>
+  <div class="c" style="top:1150px"><div class="card"><div class="sub" style="color:#f6eedf;font-weight:600">Четыре имама.<br>Не соперники — учителя и ученики.</div></div></div>
+  <div class="c" style="top:1420px"><div class="slot" style="height:200px">сюда стикер «Викторина»</div></div>
+</div>
+
+<!-- 3. Призыв -->
+<div class="story" id="s3">
+  <svg class="pat" width="1080" height="1920"><rect width="1080" height="1920" fill="url(#stars)"/></svg>
+  <div class="vig"></div>
+  <div class="dots">● ● ●</div>
+  <div class="c" style="top:260px"><span class="tag">НОВЫЙ РИЛС</span></div>
+  <div class="c" style="top:370px"><div class="h" style="font-size:86px">Вся история<br><span class="grad" style="white-space:nowrap">4 мазхабов</span><br>— за <span class="acc">2 минуты</span></div></div>
+  <div class="c" style="top:740px">
+    <div style="position:relative;display:inline-block;width:470px;height:836px;border-radius:34px;overflow:hidden;border:2px solid rgba(232,213,176,.7);box-shadow:0 0 80px rgba(59,140,255,.45),0 40px 90px rgba(0,0,0,.7)">
+      <img src="../banner/banner.png" style="width:100%;height:100%;object-fit:cover;display:block">
+      <div style="position:absolute;left:50%;top:50%;width:150px;height:150px;margin:-75px 0 0 -75px;border-radius:50%;background:rgba(10,22,48,.55);border:3px solid #f6eedf;backdrop-filter:blur(8px);box-shadow:0 0 50px rgba(59,140,255,.8)">
+        <svg viewBox="0 0 100 100" width="150" height="150"><path d="M40 30 L72 50 L40 70 Z" fill="#f6eedf"/></svg>
+      </div>
+    </div>
+  </div>
+  <div class="c" style="top:1630px"><div class="cap">Жми на видео — смотри до конца 👆</div></div>
+</div>
+
+<script>
+const STAR = (() => { const p = []; for (let k = 0; k < 16; k++) { const r = k % 2 ? 76 : 96, a = ((k * 22.5 - 90) * Math.PI) / 180; p.push(`${(r * Math.cos(a)).toFixed(1)},${(r * Math.sin(a)).toFixed(1)}`); } return p.join(' '); })();
+const medal = (ar, col, fs) => `<svg width="200" height="200" viewBox="-110 -110 220 220" style="overflow:visible;margin:0 8px">
+  <circle r="106" fill="none" stroke="${col}" stroke-opacity=".45" stroke-width="1.2" stroke-dasharray="2 6"/>
+  <polygon points="${STAR}" fill="url(#medFill)" stroke="${col}" stroke-width="2.4" style="filter:drop-shadow(0 0 12px ${col})"/>
+  <circle r="64" fill="url(#medInner)" stroke="#e8d5b0" stroke-opacity=".65" stroke-width="1.4"/>
+  <text y="${fs * 0.3}" text-anchor="middle" font-family="Amiri" font-weight="700" font-size="${fs}" fill="#f6eedf">${ar}</text></svg>`;
+document.getElementById('meds').innerHTML =
+  medal('أبو حنيفة', '#3b8cff', 30) + medal('مالك', '#e2a955', 46) + medal('الشافعي', '#8fd3ff', 36) + medal('أحمد', '#f5d9a6', 46);
+const n = new URLSearchParams(location.search).get('s') || '1';
+document.getElementById('s' + n).classList.add('on');
+window.ready = document.fonts.ready.then(() => Promise.all(['900 40px "Playfair Display"', '700 40px Amiri', 'italic 500 40px "Playfair Display"'].map((f) => document.fonts.load(f, 'АБВ أبو')))).then(() => new Promise((r) => setTimeout(r, 300)));
+</script>
+</body>
+</html>
