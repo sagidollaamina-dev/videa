@@ -1,0 +1,319 @@
+<title>Иммунотропты вирустар · сториборд</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a film-strip — each scene is a frame row (art left, shot notes right), dark like a screening room */
+:root{
+  --bg:#150b12; --panel:#1f1119; --line:#3a2030; --fg:#f6e9ee; --muted:#b597a5;
+  --rose:#f08aa2; --crimson:#e3405a; --violet:#8c7ff0; --amber:#ffb45c; --cyan:#79d3e0;
+  --display:"Unbounded","IBM Plex Sans",system-ui,sans-serif;
+  --body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:15px/1.6 var(--body);
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:40px 64px}
+.wrap{max-width:1120px;margin:0 auto;display:grid;gap:56px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;line-height:1.2}
+h1{font-size:clamp(28px,5vw,48px);font-weight:700;letter-spacing:-.01em}
+h2{font-size:22px;font-weight:500}
+h3{font-size:17px;font-weight:500}
+p{margin:0}
+.eyebrow{font:500 12px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--rose)}
+.lead{color:var(--muted);max-width:68ch;font-size:16px}
+header{display:grid;gap:16px}
+.facts{display:flex;flex-wrap:wrap;gap:8px 20px;font:13px var(--mono);color:var(--muted)}
+.facts b{color:var(--fg);font-weight:500}
+section{display:grid;gap:20px}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
+.note{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:18px;display:grid;gap:8px;min-width:0}
+.note ul{margin:0;padding-left:18px;display:grid;gap:4px;color:var(--muted)}
+.note li b{color:var(--fg);font-weight:500}
+.prompt{position:relative;background:#0e070c;border:1px solid var(--line);border-radius:8px;padding:14px 14px 14px;font:13px/1.55 var(--mono);color:#e9d6de;white-space:pre-wrap;overflow-wrap:anywhere}
+.copy{position:absolute;top:8px;right:8px;font:500 11px var(--mono);letter-spacing:.06em;text-transform:uppercase;background:var(--line);color:var(--fg);border:0;border-radius:6px;padding:6px 9px;cursor:pointer}
+.copy:hover{background:var(--crimson)}
+.copy:focus-visible,summary:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
+.timeline{display:flex;height:34px;border-radius:6px;overflow:hidden;border:1px solid var(--line)}
+.timeline a{display:flex;align-items:center;justify-content:center;font:500 11px var(--mono);color:var(--fg);text-decoration:none;border-right:1px solid var(--bg);min-width:0}
+.timeline a:hover{filter:brightness(1.3)}
+.scene{display:grid;grid-template-columns:minmax(0,420px) minmax(0,1fr);gap:24px;padding-top:28px;border-top:1px solid var(--line);scroll-margin-top:16px}
+.art{display:grid;gap:8px;align-content:start}
+.art svg{width:100%;height:auto;display:block;border-radius:8px;border:1px solid var(--line)}
+.tc{font:500 13px var(--mono);color:var(--amber);display:flex;justify-content:space-between}
+.info{display:grid;gap:14px;min-width:0}
+.info h3 .n{color:var(--rose);margin-right:8px}
+.kz{border-left:2px solid var(--crimson);padding-left:14px;font-size:16px;color:var(--fg)}
+dl{display:grid;grid-template-columns:130px minmax(0,1fr);gap:8px 16px;margin:0}
+dt{font:500 11px/1.9 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+dd{margin:0;color:#e8d5dd}
+.chip{display:inline-block;font:500 12px var(--mono);background:#2b1622;border:1px solid var(--line);color:var(--fg);padding:2px 8px;border-radius:4px;margin:0 4px 4px 0}
+details summary{cursor:pointer;font:500 12px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--rose)}
+details[open] summary{margin-bottom:10px}
+svg text{font-family:var(--body)}
+.lbl{fill:#fff;font-weight:600;font-size:11px;text-anchor:middle;paint-order:stroke;stroke:rgba(40,0,15,.55);stroke-width:2.5px}
+.tiny{fill:#fff;font-size:7px;font-weight:500;text-anchor:middle;opacity:.9}
+@media (max-width:760px){.scene{grid-template-columns:1fr}dl{grid-template-columns:1fr;gap:2px}dd{margin-bottom:8px}}
+@media (prefers-reduced-motion:no-preference){.art svg .pulse{animation:p 3s ease-in-out infinite}@keyframes p{50%{opacity:.45}}}
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="40%" r="75%"><stop offset="0" stop-color="#f5b3c1"/><stop offset=".55" stop-color="#c25676"/><stop offset="1" stop-color="#4a1428"/></radialGradient>
+    <radialGradient id="bgD" cx="50%" cy="50%" r="70%"><stop offset="0" stop-color="#6a2340"/><stop offset="1" stop-color="#1a0710"/></radialGradient>
+    <radialGradient id="gCell" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="#c9c2ff"/><stop offset=".6" stop-color="#7a6bd8"/><stop offset="1" stop-color="#3b2c86"/></radialGradient>
+    <radialGradient id="gTis" cx="40%" cy="30%" r="80%"><stop offset="0" stop-color="#f9c2cd"/><stop offset="1" stop-color="#a53a5a"/></radialGradient>
+    <radialGradient id="gVir" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="#ff8a8a"/><stop offset=".6" stop-color="#d4182f"/><stop offset="1" stop-color="#6e0616"/></radialGradient>
+    <radialGradient id="gAmb" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#ffe0a8"/><stop offset="1" stop-color="#ff9d2e" stop-opacity="0"/></radialGradient>
+    <radialGradient id="gRbc" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#f6a3b0"/><stop offset=".7" stop-color="#e2667e"/><stop offset="1" stop-color="#b8405a"/></radialGradient>
+    <symbol id="v" viewBox="-30 -30 60 60"><circle r="20" fill="none" stroke="#ff5f70" stroke-width="8" stroke-dasharray="1.6 3.4"/><circle r="17" fill="url(#gVir)"/></symbol>
+    <symbol id="c" viewBox="-50 -50 100 100"><circle r="46" fill="url(#gCell)"/><circle r="24" cx="6" cy="-2" fill="#4a3399" opacity=".65"/></symbol>
+    <symbol id="m" viewBox="-60 -50 120 100"><path d="M-48 -6 C-52 -34 -18 -46 6 -40 C30 -46 56 -24 50 2 C58 22 34 46 6 40 C-20 48 -44 30 -40 14 C-58 10 -56 0 -48 -6Z" fill="url(#gCell)"/><circle r="18" cx="-4" cy="2" fill="#4a3399" opacity=".6"/></symbol>
+    <symbol id="ab" viewBox="-10 -12 20 24"><path d="M0 12 V0 M0 0 L-7 -9 M0 0 L7 -9" stroke="#79d3e0" stroke-width="2.4" fill="none" stroke-linecap="round"/></symbol>
+  </defs>
+</svg>
+
+<div class="wrap">
+  <header>
+    <span class="eyebrow">Сториборд · медицинская 3D-анимация · казахская озвучка</span>
+    <h1>Иммунотропты вирустар</h1>
+    <p class="lead">Научно-популярный ролик в стиле референса: фотореалистичный микромир внутри организма, камера плавно летит сквозь ткани и клетки, короткие белые подписи, за кадром спокойный голос профессора. Каждое предложение текста показано отдельным действием на экране.</p>
+    <div class="facts">
+      <span><b>14</b> сцен</span><span>≈ <b>3:48</b></span><span><b>16:9</b> · 1920×1080 · 24 fps</span><span>темп голоса ≈ <b>110 слов/мин</b></span>
+    </div>
+  </header>
+
+  <section>
+    <h2>Что берём из референса</h2>
+    <div class="cols">
+      <div class="note"><h3>Картинка</h3><ul>
+        <li><b>Фотореалистичный 3D</b>, макро-объектив, малая глубина резкости, боке</li>
+        <li><b>Палитра</b>: розовый, коралловый и малиновый для тканей; красные вирусы; фиолетово-синие иммунные клетки</li>
+        <li>Взвесь частиц и объёмный свет в каждом кадре</li>
+      </ul></div>
+      <div class="note"><h3>Движение и монтаж</h3><ul>
+        <li><b>Без жёстких склеек</b>: камера пролетает сквозь мембрану, следует за объектом, переводит фокус</li>
+        <li>Медленный долли, облёт, пролёт; каждый план 6–12 с</li>
+        <li>Склейки по форме: круглый вирус переходит в клетку, ядро, лунку планшета</li>
+      </ul></div>
+      <div class="note"><h3>Текст на экране</h3><ul>
+        <li>Только термины, <b>белый жирный гротеск</b> с мягкой тенью, по центру внизу</li>
+        <li>Появляется вместе со словом в озвучке, держится 2–3 с, растворяется</li>
+        <li>Без логотипов и водяных знаков</li>
+      </ul></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Главный промт стиля</h2>
+    <p class="lead">Добавляйте в начало каждого промта для генерации кадров (Midjourney, Flux) и видео (Kling, Runway, Veo, Sora). Так все сцены будут выглядеть как один фильм.</p>
+    <div class="prompt" id="p-master"><button class="copy" data-for="p-master">Копировать</button>STYLE: photorealistic cinematic 3D biomedical animation of the microscopic world inside the human body, high-end educational medical visualization. Organic tissues with subsurface scattering, translucent cell membranes, glossy spherical viruses with red spike proteins, violet-blue immune cells (lymphocytes, macrophages), amber-glowing viral genetic material. Floating particles, volumetric soft light, macro 100mm lens look, shallow depth of field, creamy bokeh. Palette: warm pink, coral, crimson, deep magenta shadows; accents of violet-blue and amber. Camera: slow continuous moves only (dolly-in, orbit, fly-through), smooth and weightless, no shake. Transitions inside the shot: flying through membranes, following an object, focus pulls, match-cuts on round shapes. 16:9, 1920x1080, 24 fps.
+NEGATIVE: cartoon, flat 2D, plastic toy look, text, letters, subtitles, watermark, logo, human faces, gore, blood splatter, fast cuts, flicker, camera shake, oversaturated neon.</div>
+  </section>
+
+  <section>
+    <h2>Голос профессора</h2>
+    <div class="cols">
+      <div class="note"><h3>Для диктора или ElevenLabs</h3><ul>
+        <li><b>Образ</b>: профессор-иммунолог 50–60 лет, низкий тёплый тембр, уверенно и спокойно, как на хорошей лекции</li>
+        <li><b>Язык</b>: литературный казахский, чёткие ә ғ қ ң ө ұ ү і</li>
+        <li><b>Темп</b>: 105–115 слов/мин; пауза 0,6 с между предложениями и 1,2 с между абзацами (это стыки сцен)</li>
+        <li><b>Акценты</b>: перед ключевым термином короткая пауза, сам термин чуть медленнее</li>
+      </ul></div>
+      <div class="note"><h3>Настройки и произношение</h3><ul>
+        <li><b>ElevenLabs</b>: Multilingual v2, Stability 55%, Similarity 75%, Style 15–20%</li>
+        <li><b>ПТР</b> → «пэ-тэ-эр», <b>АИТВ</b> → «а-и-тэ-вэ», <b>IgM / IgG</b> → «иммуноглобулин эм / жэ»</li>
+        <li><b>Звук</b>: эмбиент-пэды под голосом (−24 LUFS), мягкие «вжух» на переходах, приглушённые органические звуки</li>
+      </ul></div>
+    </div>
+    <div class="prompt" id="p-voice"><button class="copy" data-for="p-voice">Копировать</button>Narration voice: a calm, authoritative university professor of immunology, age 50–60, warm low timbre, clear literary Kazakh pronunciation. Speaks like an engaging lecture, not an advertisement: measured pace (~110 words per minute), a short pause before each key medical term and a slight slowdown on the term itself, 0.6 s pauses between sentences, 1.2 s between paragraphs. Tone: knowledgeable, reassuring, curious. No dramatic acting, no whispering.</div>
+  </section>
+
+  <section>
+    <h2>Таймлайн</h2>
+    <div class="timeline" id="tl"></div>
+  </section>
+
+  <section id="scenes" aria-label="Сцены"></section>
+
+  <section>
+    <h2>Как собрать ролик</h2>
+    <div class="cols">
+      <div class="note"><h3>1. Озвучка</h3><p class="lead">Записать текст по сценам (14 файлов). Реальная длина каждого файла задаёт длительность сцены.</p></div>
+      <div class="note"><h3>2. Ключевые кадры</h3><p class="lead">Для каждой сцены 1–3 стоп-кадра: главный промт стиля плюс промт сцены. Отбираем по единству цвета.</p></div>
+      <div class="note"><h3>3. Анимация</h3><p class="lead">Image-to-video, клипы по 5–10 с, движение камеры берём из строки «Камера». Длинные сцены собираем из 2–3 клипов.</p></div>
+      <div class="note"><h3>4. Монтаж</h3><p class="lead">Клипы под голос, белые подписи по таймкодам, переходы как в строке «Переход», музыка и звуки.</p></div>
+    </div>
+  </section>
+</div>
+
+<script>
+const V=(x,y,s=24,o=1)=>`<use href="#v" x="${x-s/2}" y="${y-s/2}" width="${s}" height="${s}" opacity="${o}"/>`;
+const C=(x,y,s=60,k='c',o=1)=>`<use href="#${k}" x="${x-s/2}" y="${y-s/2}" width="${s}" height="${s}" opacity="${o}"/>`;
+const AB=(x,y,s=10,o=1)=>`<use href="#ab" x="${x-s/2}" y="${y-s/2}" width="${s}" height="${s*1.2}" opacity="${o}"/>`;
+const L=t=>`<text x="160" y="166" class="lbl">${t}</text>`;
+const T=(x,y,t,size=7)=>`<text x="${x}" y="${y}" class="tiny" style="font-size:${size}px">${t}</text>`;
+const BG=(id='bg')=>`<rect width="320" height="180" fill="url(#${id})"/>`;
+const bokeh=(n=7,seed=3)=>{let s='',r=seed;for(let i=0;i<n;i++){r=(r*9301+49297)%233280;const x=r/233280*320;r=(r*9301+49297)%233280;const y=r/233280*180;s+=`<circle cx="${x.toFixed(0)}" cy="${y.toFixed(0)}" r="${(4+i%4*5)}" fill="#fff" opacity=".12"/>`}return s};
+const tissue=`<path d="M0 138 Q60 112 130 132 T260 120 T320 128 V180 H0Z" fill="url(#gTis)" opacity=".95"/><path d="M0 0 H320 V24 Q240 44 160 26 T0 34Z" fill="url(#gTis)" opacity=".7"/>`;
+const dna=(y,amp,col,w=2,o=1)=>{let d=`M0 ${y}`;for(let x=0;x<=320;x+=20)d+=` Q${x+10} ${y+(x/20%2?amp:-amp)} ${x+20} ${y}`;return `<path d="${d}" stroke="${col}" stroke-width="${w}" fill="none" opacity="${o}"/>`};
+const person=(cx,o=.55)=>`<g fill="#ffd9e2" opacity="${o}"><circle cx="${cx}" cy="34" r="13"/><rect x="${cx-20}" y="50" width="40" height="62" rx="16"/><rect x="${cx-33}" y="54" width="11" height="52" rx="5.5"/><rect x="${cx+22}" y="54" width="11" height="52" rx="5.5"/><rect x="${cx-17}" y="104" width="14" height="56" rx="7"/><rect x="${cx+3}" y="104" width="14" height="56" rx="7"/></g>`;
+
+const S=[
+{t:'Вход в микромир',a:'0:00',b:'0:14',
+ kz:'Иммунотропты вирустар — иммундық жүйенің жасушаларына немесе оның қызметін реттейтін механизмдерге бағытталған вирустар.',
+ vis:'Из темноты проявляется макро-план ткани, как в начале референса. Камера скользит вдоль стенки сосуда и выходит в кровоток. В кадр вплывают красные шипастые вирусы и плывут к группе фиолетовых иммунных клеток вдали. На 1–4 с название ролика, потом оно рассыпается на частицы.',
+ cam:'Медленный долли вперёд с лёгким креном 5°, фокус переходит с ткани на вирус.',
+ txt:['Иммунотропты вирустар'],
+ tr:'Камера садится «на хвост» одному вирусу и летит за ним к клеткам.',
+ p:'Fade in from black to an extreme macro of pink epithelial tissue, camera glides along a blood vessel wall and emerges into the bloodstream; several red spiky spherical viruses drift past the lens toward a distant cluster of violet immune cells; floating particles, slow dolly forward with gentle 5-degree roll, rack focus from tissue to the nearest virus.',
+ art:()=>BG()+bokeh(8,5)+tissue+V(88,84,34)+V(214,62,18)+V(262,98,12)+C(286,74,36,'c',.7)+`<text x="160" y="104" class="lbl" style="font-family:var(--display);font-size:13px">ИММУНОТРОПТЫ ВИРУСТАР</text>`},
+{t:'Мишени вирусов',a:'0:14',b:'0:26',
+ kz:'Олардың негізгі нысаналарына Т-лимфоциттер, В-лимфоциттер, моноциттер, макрофагтар және басқа да иммундық жасушалар жатады.',
+ vis:'Камера облетает скопление иммунных клеток. Когда диктор называет клетку, она подсвечивается контровым светом и рядом появляется подпись: Т-лимфоцит, В-лимфоцит, моноцит, макрофаг. Вирусы медленно тянутся к каждой из них.',
+ cam:'Облёт по дуге 90°, клетки по очереди попадают в фокус.',
+ txt:['Т-лимфоцит','В-лимфоцит','Моноцит','Макрофаг'],
+ tr:'Перевод фокуса на Т-лимфоцит, камера приближается к нему.',
+ p:'Slow orbital camera move around a cluster of immune cells floating in pinkish plasma: a small round T-lymphocyte, a B-lymphocyte, a larger monocyte with kidney-shaped nucleus and an irregular macrophage with pseudopods; each cell in turn receives a soft blue rim light as focus shifts to it; red spiky viruses slowly drift toward each cell.',
+ art:()=>BG()+bokeh(6,11)+C(62,78,52)+C(130,104,46)+C(204,72,60)+C(270,112,74,'m')+V(98,46,16)+V(170,140,14)+V(240,40,16)+V(300,64,12)+T(62,44,'Т-лимфоцит')+T(130,74,'В-лимфоцит')+T(204,36,'Моноцит')+T(270,70,'Макрофаг')},
+{t:'Долгие отношения',a:'0:26',b:'0:36',
+ kz:'Бұл вирустардың маңызды ерекшелігі — иммундық жүйемен ұзақ уақыт бойы күрделі қарым-қатынас орнатуы.',
+ vis:'Крупно: вирус шипами цепляется к рецепторам Т-лимфоцита. Затем таймлапс: свет вокруг медленно меняется циклами, по мембране пробегают волны, вирус и клетка остаются вместе. Вокруг них едва заметное кольцо света, похожее на циферблат, как намёк на время.',
+ cam:'Почти статичный крупный план с медленным наездом, свет меняется во времени.',
+ txt:['Ұзақ уақыт · күрделі қарым-қатынас'],
+ tr:'Отъезд камеры: рядом видны ещё три клетки, начинается следующая сцена.',
+ p:'Close-up of a red spiky virus docking onto receptors on the surface of a violet T-lymphocyte, spike proteins binding; then a time-lapse: ambient light slowly cycles warm and cool several times, gentle waves ripple across the cell membrane while virus and cell stay connected; a faint ring of light around them like a clock face; very slow push-in.',
+ art:()=>BG('bgD')+bokeh(5,7)+`<circle cx="150" cy="88" r="74" fill="none" stroke="#ffd7a0" stroke-width="1.2" stroke-dasharray="2 9" opacity=".7" class="pulse"/>`+C(132,90,128)+`<circle cx="204" cy="66" r="20" fill="url(#gAmb)" opacity=".8"/>`+V(206,64,34)+L('Ұзақ уақыт · күрделі қарым-қатынас')},
+{t:'Три способа навредить',a:'0:36',b:'0:47',
+ kz:'Олар иммундық жасушаларды тікелей зақымдауы, олардың қызметін өзгертуі немесе иммундық жауапты әлсіретуі мүмкін.',
+ vis:'Три клетки в ряд, каждая под своё слово. 1) «зақымдауы»: мембрана трескается, содержимое выходит наружу. 2) «қызметін өзгертуі»: свечение внутри клетки меняется со спокойного синего на тревожный красный. 3) «әлсіретуі»: поток антител рядом редеет и гаснет.',
+ cam:'Боковой трэвеллинг слева направо: камера проезжает мимо трёх клеток по очереди.',
+ txt:['Зақымдау','Қызметін өзгерту','Жауапты әлсірету'],
+ tr:'Камера ныряет к поверхности вируса у последней клетки.',
+ p:'Lateral tracking shot from left to right past three immune cells in a row: first cell membrane cracks and ruptures releasing particles; second cell inner glow shifts from calm blue to alarming red as a virus sits on it; third cell surrounded by a stream of Y-shaped antibodies that thins out and fades away.',
+ art:()=>BG()+`<line x1="107" y1="10" x2="107" y2="150" stroke="#fff" opacity=".25"/><line x1="213" y1="10" x2="213" y2="150" stroke="#fff" opacity=".25"/>`
+   +C(54,76,70)+`<path d="M30 52 L48 70 L40 80 L60 98 L54 110" stroke="#2a0c18" stroke-width="3" fill="none"/><circle cx="76" cy="104" r="3" fill="#c9c2ff"/><circle cx="86" cy="112" r="2" fill="#c9c2ff"/>`
+   +C(160,76,70)+`<circle cx="164" cy="74" r="20" fill="#ff3b55" opacity=".55" class="pulse"/>`+V(192,48,18)
+   +C(266,76,70,'c',.6)+AB(228,40,12,.8)+AB(244,120,10,.45)+AB(304,52,9,.3)+AB(300,118,8,.18)
+   +T(54,138,'Зақымдау',9)+T(160,138,'Қызметін өзгерту',9)+T(266,138,'Жауапты әлсірету',9)},
+{t:'Маскировка',a:'0:47',b:'0:56',
+ kz:'Кейбір вирустар иммундық жүйенің бақылауынан жасырыну үшін өздерінің антигендік белсенділігін төмендетеді.',
+ vis:'Макро-план вируса. Его яркие антигены-шипы тускнеют и втягиваются, поверхность становится матовой, вирус почти сливается с фоном. Мимо проплывает макрофаг, «ощупывает» пространство псевдоподиями, не замечает вирус и уплывает.',
+ cam:'Статичный макро-план, затем лёгкий отъезд, когда в кадр входит макрофаг.',
+ txt:['Антигендік белсенділік ↓'],
+ tr:'Макрофаг заслоняет весь кадр (шторка объектом) и открывает следующую сцену.',
+ p:'Macro shot of a single red virus whose bright spike antigens slowly dim and retract, its surface turning matte and blending into the pink background like camouflage; a large violet macrophage glides past in the foreground, extending pseudopods that sense around, then moves on without noticing the virus; slow pull-back.',
+ art:()=>BG()+bokeh(7,21)+V(120,86,70,.3)+`<circle cx="120" cy="86" r="21" fill="url(#gVir)" opacity=".55"/>`+C(262,92,130,'m',.9)+L('Антигендік белсенділік ↓')},
+{t:'Цитокины',a:'0:56',b:'1:06',
+ kz:'Басқалары иммундық жауапты реттейтін цитокиндердің түзілуіне әсер етеді.',
+ vis:'Две иммунные клетки «переговариваются»: между ними летят дугами светящиеся голубые капли-цитокины. Вирус внутри одной клетки сбивает сигнал: поток становится хаотичным, капли краснеют, часть гаснет.',
+ cam:'Медленная панорама между клетками вдоль потока сигналов.',
+ txt:['Цитокиндер'],
+ tr:'Частицы цитокинов стягиваются в центр и складываются в слова следующей сцены.',
+ p:'Two violet immune cells exchanging glowing cyan droplet-like signaling molecules (cytokines) along graceful arcs; a virus inside one cell disrupts the signaling, the stream becomes chaotic, some droplets turn red and others fade out; slow pan following the particle stream.',
+ art:()=>{let d='';for(let i=0;i<12;i++){const t=i/11,x=70+t*180,y=88-Math.sin(t*Math.PI)*46;d+=`<circle cx="${x.toFixed(0)}" cy="${y.toFixed(0)}" r="${2.6}" fill="${i>7?'#ff4d63':'#79d3e0'}" opacity="${i>9?.35:.95}"/>`}
+   return BG('bgD')+bokeh(6,4)+C(58,98,80)+C(262,98,80)+V(270,104,20)+d+`<circle cx="160" cy="132" r="2" fill="#79d3e0"/><circle cx="182" cy="122" r="2.4" fill="#ff4d63"/>`+L('Цитокиндер')}},
+{t:'Два свойства',a:'1:06',b:'1:14',
+ kz:'Иммунотропты вирустардың тағы бір ортақ қасиеті — персистенция және латенттілік қалыптастыру қабілеті.',
+ vis:'Пауза-заставка внутри того же мира: в розовом тумане из частиц собираются два слова, ПЕРСИСТЕНЦИЯ и ЛАТЕНТТІЛІК, между ними медленно вращается вирус. Слова расходятся влево и вправо.',
+ cam:'Камера пролетает между словами прямо к клетке позади них.',
+ txt:['Персистенция','Латенттілік'],
+ tr:'Пролёт сквозь клеточную мембрану внутрь клетки.',
+ p:'Soft pink volumetric fog with floating particles, a single red virus slowly rotating in the center, empty negative space on the left and right for titles to be added in editing; camera flies forward past the virus toward a large translucent cell membrane behind it and passes through it.',
+ art:()=>BG('bgD')+bokeh(9,9)+V(160,88,40)+`<text x="78" y="92" class="lbl" style="font-family:var(--display);font-size:12px">ПЕРСИСТЕНЦИЯ</text><text x="246" y="92" class="lbl" style="font-family:var(--display);font-size:12px">ЛАТЕНТТІЛІК</text>`},
+{t:'Персистенция и латентность',a:'1:14',b:'1:36',
+ kz:'Персистенция кезінде вирус адам ағзасында ұзақ уақыт сақталады. Ал латентті инфекция кезінде вирустың генетикалық материалы жасуша ішінде болғанымен, жаңа вирустық бөлшектер белсенді түрде түзілмеуі мүмкін. Мұндай жағдайда адамда клиникалық белгілер байқалмайды.',
+ vis:'Три такта. 1) Внутри клетки вирусы тихо живут среди органелл, в углу мягкий счётчик «ай → жыл → жылдар». 2) Камера входит в ядро: среди нитей ДНК клетки встроен янтарный участок вирусного генома. Он едва светится, «спит», сборки новых вирусов нет. 3) Отъезд до полупрозрачного силуэта человека: спокойный, ровный пульс, никаких симптомов.',
+ cam:'Пролёт через цитоплазму → вход в ядро сквозь пору → большой отъезд до всего тела.',
+ txt:['Персистенция','Латентті инфекция','Клиникалық белгілер жоқ'],
+ tr:'Вокруг силуэта мягкое защитное свечение: это иммунитет, на нём начнётся следующая сцена.',
+ p:'Inside a cell: a few viruses resting quietly among organelles; camera moves through a nuclear pore into the nucleus where strands of host DNA float, one segment woven into the DNA glows dim amber (dormant viral genome), nothing else happens, calm and still; then a long continuous pull-back out of the cell and tissue to a translucent glowing human silhouette standing calmly with a steady soft pulse.',
+ art:()=>BG('bgD')+`<circle cx="120" cy="88" r="80" fill="#8a2e52" opacity=".5"/>`+dna(70,12,'#f2a7b8',2)+dna(86,12,'#c96d8c',2)+dna(102,10,'#f2a7b8',1.5,.6)+`<rect x="96" y="60" width="44" height="34" rx="10" fill="url(#gAmb)" class="pulse"/>`+person(274,.5)+`<circle cx="274" cy="90" r="58" fill="none" stroke="#bff0d6" stroke-width="1.5" opacity=".45"/>`+T(118,124,'вирус геномы (тыныштықта)',8)+L('Латентті инфекция · белгілер жоқ')},
+{t:'Реактивация',a:'1:36',b:'2:00',
+ kz:'Алайда иммунитет төмендеген кезде вирус қайта белсенділенеді. Бұл құбылыс реактивация деп аталады. Реактивация трансплантациядан кейін, иммунды супрессиялайтын дәрілерді қабылдағанда, АИТВ-инфекциясы кезінде, онкологиялық ауруларда немесе ауыр созылмалы жағдайларда байқалуы мүмкін.',
+ vis:'Защитное свечение вокруг силуэта мерцает и трескается. Быстрый, но плавный нырок обратно в ядро: янтарный участок ДНК вспыхивает, с него сходят нити мРНК, собираются новые вирусы и отпочковываются от клетки, как в финале референса. Крупное слово РЕАКТИВАЦИЯ. Затем по кругу всплывают пять стеклянных иконок-причин, каждая под своё слово в озвучке.',
+ cam:'Нырок с ускорением, затем облёт клетки, из которой выходят вирусы; для причин камера медленно вращается вокруг клетки.',
+ txt:['РЕАКТИВАЦИЯ','Трансплантация','Иммуносупрессорлар','АИТВ','Онкология','Созылмалы аурулар'],
+ tr:'Новые вирусы уносит в кровоток, камера летит за ними и выходит к телу.',
+ p:'A glowing protective aura around a translucent human silhouette flickers and cracks; fast but smooth dive back into a cell nucleus where an amber segment of DNA flares bright, strands of mRNA spill out, dozens of new red virus particles assemble and bud off from the cell surface into the bloodstream; energetic yet elegant, orbiting camera.',
+ art:()=>{let v='';for(let i=0;i<9;i++){const a=i/9*Math.PI*2,r=58;v+=V(130+Math.cos(a)*r,84+Math.sin(a)*r*.75,12+i%3*3)}
+   const ic=['Транспл.','Дәрілер','АИТВ','Онко','Созылмалы'].map((s,i)=>`<circle cx="${236}" cy="${22+i*28}" r="11" fill="#fff" opacity=".16" stroke="#fff" stroke-opacity=".5"/>`+T(236,25+i*28,s,6)).join('');
+   return BG()+`<circle cx="130" cy="84" r="40" fill="url(#gTis)"/><circle cx="130" cy="84" r="26" fill="url(#gAmb)" class="pulse"/>`+v+ic+`<text x="130" y="160" class="lbl" style="font-family:var(--display);font-size:13px">РЕАКТИВАЦИЯ</text>`}},
+{t:'Клинические признаки',a:'2:00',b:'2:30',
+ kz:'Иммунотропты вирустық инфекциялардың клиникалық белгілері әртүрлі болады. Науқаста ұзаққа созылған қызба, әлсіздік, тамақтың ауыруы, лимфа түйіндерінің ұлғаюы, бауыр мен көкбауырдың үлкеюі байқалуы мүмкін. Кейбір жағдайларда теріде бөртпе немесе күлгін түсті түйіндер пайда болады. Иммунитеті төмен адамдарда көрудің бұзылуы, пневмония, энцефалит және басқа да мүшелердің зақымдануы кездеседі.',
+ vis:'Полупрозрачное тело в той же розовой гамме. Органы загораются ровно под слова: тёплое марево над телом (қызба), тело тускнеет (әлсіздік), горло, лимфоузлы на шее и в подмышках набухают, печень и селезёнка увеличиваются. Наезд на кожу: макро сыпи и фиолетовых узелков. Для ослабленного иммунитета: глаз (сетчатка), лёгкие (мутные очаги пневмонии), мозг (воспаление).',
+ cam:'Медленный вертикальный проезд сверху вниз по телу, потом точечные наезды на каждую зону.',
+ txt:['Қызба','Әлсіздік','Тамақ ауыруы','Лимфа түйіндері','Бауыр · көкбауыр','Бөртпе','Көру','Пневмония','Энцефалит'],
+ tr:'Наезд в вену на руке, мы снова в крови и в капле на предметном стекле.',
+ p:'Translucent anatomical human body rendered in soft pink glass-like material against a dark magenta background, organs highlighting one by one with warm glow: heat shimmer around the whole body, throat, swollen lymph nodes in neck and armpits, enlarged liver and spleen; then macro of skin with a reddish rash and small violet nodules; then highlights on the eye retina, cloudy patches in the lungs, and an inflamed brain; slow vertical camera travel and gentle push-ins.',
+ art:()=>{const pts=[[160,32,'Энцефалит'],[154,30,''],[160,54,'Тамақ'],[146,58,'Лимфа'],[174,58,''],[150,84,'Өкпе'],[148,104,'Бауыр'],[176,104,'Көкбауыр']];
+   const p=pts.map(([x,y,s])=>`<circle cx="${x}" cy="${y}" r="5" fill="#ffb45c" opacity=".9" class="pulse"/>`+(s?T(x<160?x-26:x+30,y+3,s,7):'')).join('');
+   return BG('bgD')+`<circle cx="160" cy="90" r="78" fill="#ff7a5c" opacity=".08"/>`+person(160,.42)+p+`<circle cx="214" cy="140" r="4" fill="#8c5cd6"/><circle cx="222" cy="134" r="3" fill="#8c5cd6"/><circle cx="208" cy="132" r="2.5" fill="#d96a7a"/>`+T(224,152,'Бөртпе · түйіндер',7)+L('Қызба · әлсіздік · лимфа түйіндерінің ұлғаюы')}},
+{t:'Анализ крови',a:'2:30',b:'2:44',
+ kz:'Зертханалық қан талдауында лейкопения, лимфоцитоз немесе атипиялық мононуклеарлар анықталуы мүмкін. Бірақ бұл белгілердің ешқайсысы жеке өзі нақты вирусты көрсетпейді.',
+ vis:'Вид в окуляр микроскопа (круглая виньетка): мазок крови, много эритроцитов. Лейкопения: белых клеток мало. Лимфоцитоз: среди них преобладают лимфоциты. Крупный атипичный мононуклеар с широкой голубой цитоплазмой. На «бірақ» все подписи тускнеют, в центре проявляется полупрозрачный знак вопроса.',
+ cam:'Фиксированный вид в окуляр, плавная наводка резкости, медленный сдвиг препарата.',
+ txt:['Лейкопения','Лимфоцитоз','Атипиялық мононуклеарлар','?'],
+ tr:'Виньетка окуляра сужается диафрагмой и открывает сцену диагностики.',
+ p:'View through a microscope eyepiece with circular vignette: stained blood smear with many red blood cells, only a few white blood cells, mostly lymphocytes, and one large atypical mononuclear cell with wide pale-blue cytoplasm; slow focus pull and gentle slide drift; clinical, clean lighting.',
+ art:()=>{let r='';[[110,60],[136,46],[170,52],[196,70],[120,104],[150,120],[188,112],[210,96],[100,84],[160,90],[132,78],[176,84],[206,48],[118,128]].forEach(([x,y],i)=>r+=`<circle cx="${x}" cy="${y}" r="${9+i%3}" fill="url(#gRbc)" opacity=".9"/>`);
+   return `<rect width="320" height="180" fill="#0d0509"/><clipPath id="eye"><circle cx="160" cy="88" r="70"/></clipPath><g clip-path="url(#eye)"><rect width="320" height="180" fill="#f8e6e9"/>${r}<circle cx="140" cy="64" r="12" fill="#8c7ff0"/><circle cx="140" cy="64" r="8" fill="#4a3399"/><circle cx="186" cy="100" r="20" fill="#a9d6f2" opacity=".9"/><circle cx="182" cy="98" r="10" fill="#4a3399"/></g><circle cx="160" cy="88" r="70" fill="none" stroke="#2a0c18" stroke-width="4"/><text x="160" y="110" text-anchor="middle" style="font:700 64px var(--display);fill:#fff;opacity:.35">?</text>`+L('Лейкопения · лимфоцитоз · атипиялық мононуклеарлар')}},
+{t:'Диагностика',a:'2:44',b:'3:16',
+ kz:'Сондықтан диагноз қою үшін клиникалық мәліметтер зертханалық зерттеу нәтижелерімен бірге бағаланады. Серологиялық әдістер арқылы вирусқа қарсы IgM және IgG антиденелері анықталады. ПТР әдісі вирустың ДНҚ-сын, РНҚ-сын немесе провирустық ДНҚ-сын табуға мүмкіндік береді. Кейбір жағдайларда вирустық жүктеме, антиденелердің авидтілігі, иммундық жасушалардың саны және тіндердің морфологиялық өзгерістері зерттеледі.',
+ vis:'Четыре такта. 1) Две светящиеся половинки «Клиника» и «Зертхана» сходятся в одну. 2) Серология: лунки планшета окрашиваются; крупно антитела: IgM как пятилучевая звезда, IgG как одиночная Y, обе захватывают вирус. 3) ПТР: двойная спираль расплетается и копируется лавиной, рядом растёт светящаяся S-кривая; подписи ДНҚ, РНҚ, провирус. 4) Четыре плитки: вирустық жүктеме, авидтілік, жасушалар саны, тін морфологиясы.',
+ cam:'Короткие плавные проезды; переходы по форме: круглая лунка становится вирусом, спираль становится кривой графика.',
+ txt:['Клиника + Зертхана','IgM · IgG','ПТР: ДНҚ · РНҚ · провирус','Вирустық жүктеме','Авидтілік','Жасушалар саны','Тін морфологиясы'],
+ tr:'Плитка «тін морфологиясы» приближается и становится срезом ткани, где клетки начинают делиться.',
+ p:'Sequence: ELISA microplate wells changing color in soft lab light; extreme close-up of Y-shaped IgG antibodies and a star-shaped pentameric IgM antibody binding to a red virus; a DNA double helix unzipping and copying exponentially into many glowing copies, transitioning into a rising glowing sigmoid amplification curve; clean scientific look in the same pink-magenta palette with cyan and amber accents; smooth match-cut transitions.',
+ art:()=>{let w='';for(let r=0;r<4;r++)for(let c=0;c<6;c++){const on=(r*6+c)%3!==1;w+=`<circle cx="${22+c*16}" cy="${40+r*16}" r="6" fill="${on?'#ffb45c':'#f6e2e8'}" opacity="${on?.95:.35}"/>`}
+   return BG('bgD')+`<rect x="10" y="28" width="108" height="72" rx="8" fill="#fff" opacity=".1"/>`+w+T(64,116,'Серология · IgM / IgG',8)
+   +AB(36,138,14)+`<g transform="translate(78 136)">`+[0,72,144,216,288].map(a=>`<use href="#ab" x="-5" y="-14" width="10" height="12" transform="rotate(${a})"/>`).join('')+`</g>`+V(104,138,16)
+   +`<path d="M140 120 H300" stroke="#fff" opacity=".3"/><path d="M140 28 V120" stroke="#fff" opacity=".3"/><path d="M142 118 C200 118 210 116 226 90 S260 34 300 32" stroke="#79d3e0" stroke-width="3" fill="none"/>`+T(222,140,'ПТР · ДНҚ · РНҚ · провирус',8)+L('Клиника + зертхана = диагноз')}},
+{t:'Связь с онкологией',a:'3:16',b:'3:38',
+ kz:'Иммунотропты вирустар тек инфекциялық аурулармен шектелмейді. Олардың кейбіреулері жасушалардың қалыпты өсуі мен бөлінуін өзгертіп, лимфопролиферативті немесе онкологиялық аурулардың дамуына қатысады. Мысалы, кейбір вирустар лимфомалармен, лейкемиямен немесе Капоши саркомасымен байланысты болуы мүмкін.',
+ vis:'Сначала спокойное нормальное деление клетки: одна стала двумя. Потом в ядре вспыхивает янтарный вирусный ген, и деление идёт без остановки: клетки громоздятся друг на друга, ткань теряет порядок. Три коротких плана под названия: лимфоузел, переполненный клетками (лимфома); кровь, забитая незрелыми белыми клетками (лейкемия); фиолетовые сосудистые пятна на коже (саркома Капоши).',
+ cam:'Таймлапс сверху на деление, затем три коротких плана, связанных проездами.',
+ txt:['Лимфома','Лейкемия','Капоши саркомасы'],
+ tr:'Большой отъезд сквозь слои ткани, как в конце референса.',
+ p:'Top-down time-lapse of a normal cell dividing calmly into two; then an amber glowing viral gene in the nucleus triggers uncontrolled division, cells piling up chaotically and losing tissue order; followed by three short shots: a lymph node packed with violet lymphoid cells, a blood vessel crowded with immature white blood cells, and macro of skin with purple vascular patches; ominous but scientific mood.',
+ art:()=>{let c='';[[70,90],[96,72],[96,108],[124,60],[124,90],[124,120],[152,74],[152,106],[178,90],[150,40],[180,124],[110,140],[204,64]].forEach(([x,y],i)=>c+=C(x,y,30+i%3*4,'c',.9));
+   return BG()+bokeh(5,14)+c+`<circle cx="124" cy="90" r="10" fill="url(#gAmb)" class="pulse"/>`
+   +['Лимфома','Лейкемия','Капоши саркомасы'].map((s,i)=>`<rect x="226" y="${36+i*32}" width="84" height="22" rx="4" fill="#1a0710" opacity=".55"/>`+T(268,50+i*32,s,8)).join('')}},
+{t:'Финал',a:'3:38',b:'3:48',
+ kz:'(без текста: 2–3 с тишины под музыку)',
+ vis:'Камера отъезжает сквозь слои ткани, свет гаснет. На тёмном фоне появляется название и четыре ключевых слова через точку. Всё плавно уходит в чёрное.',
+ cam:'Длинный отъезд назад с замедлением, затем статика.',
+ txt:['Иммунотропты вирустар','Персистенция · Латенттілік · Реактивация · Диагностика'],
+ tr:'Затемнение в чёрное.',
+ p:'Long slow pull-back through layers of pink tissue with drifting red virus particles, light gradually dimming to deep magenta and then to black, leaving empty dark space for a final title.',
+ art:()=>`<rect width="320" height="180" fill="#0d0509"/>`+bokeh(6,2)+`<text x="160" y="82" class="lbl" style="font-family:var(--display);font-size:16px">Иммунотропты вирустар</text><line x1="96" y1="94" x2="224" y2="94" stroke="#fff" opacity=".4"/>`+T(160,112,'Персистенция · Латенттілік · Реактивация · Диагностика',8)}
+];
+
+const sec=(s)=>{const [m,ss]=s.split(':');return +m*60+ +ss};
+const total=sec(S.at(-1).b);
+const hues=['#6a2340','#8a2e52','#a53a5a'];
+document.getElementById('tl').innerHTML=S.map((s,i)=>`<a href="#s${i+1}" title="${s.t}" style="flex:${sec(s.b)-sec(s.a)};background:${hues[i%3]}">${i+1}</a>`).join('');
+document.getElementById('scenes').innerHTML='<h2>Сцены</h2>'+S.map((s,i)=>`
+<article class="scene" id="s${i+1}">
+  <div class="art"><svg viewBox="0 0 320 180" role="img" aria-label="Эскиз сцены ${i+1}: ${s.t}">${s.art()}</svg>
+    <div class="tc"><span>${s.a} – ${s.b}</span><span>${sec(s.b)-sec(s.a)} с</span></div></div>
+  <div class="info">
+    <h3><span class="n">${String(i+1).padStart(2,'0')}</span>${s.t}</h3>
+    <p class="kz" lang="kk">${s.kz}</p>
+    <dl>
+      <dt>Визуал</dt><dd>${s.vis}</dd>
+      <dt>Камера</dt><dd>${s.cam}</dd>
+      <dt>Текст на экране</dt><dd>${s.txt.map(x=>`<span class="chip">${x}</span>`).join('')}</dd>
+      <dt>Переход</dt><dd>${s.tr}</dd>
+    </dl>
+    <details><summary>Промт сцены (EN)</summary><div class="prompt" id="p${i+1}"><button class="copy" data-for="p${i+1}">Копировать</button>[STYLE] + ${s.p}</div></details>
+  </div>
+</article>`).join('');
+
+document.addEventListener('click',e=>{const b=e.target.closest('.copy');if(!b)return;
+  const el=document.getElementById(b.dataset.for);const txt=el.textContent.replace(b.textContent,'').trim();
+  const done=()=>{b.textContent='Скопировано';setTimeout(()=>b.textContent='Копировать',1500)};
+  try{navigator.clipboard.writeText(txt).then(done,()=>{const r=document.createRange();r.selectNodeContents(el);getSelection().removeAllRanges();getSelection().addRange(r)})}catch(_){}
+});
+</script>
